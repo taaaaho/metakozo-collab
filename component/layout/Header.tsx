@@ -1,18 +1,15 @@
-import { Box, Flex, HStack, Text } from '@chakra-ui/react'
-import Image from 'next/image'
-import { useContext } from 'react'
-import { MetamaskContext } from '../../context/MetamaskContext'
-import useMetamask from '../../hooks/useMetamask'
-import Jazzicon, { jsNumberForAddress } from 'react-jazzicon'
+import { Box, Button, Flex, HStack, Text } from '@chakra-ui/react'
 import { SpMenu } from '../organisms/SpMenu'
 import { SnsLinks } from '../organisms/SnsLinks'
+import { useDisconnect, useAddress, useMetamask } from '@thirdweb-dev/react'
+import Jazzicon from 'react-jazzicon/dist/Jazzicon'
+import { jsNumberForAddress } from 'react-jazzicon'
+import Image from 'next/image'
 
 export const Header: React.FC = () => {
-  const { network, account } = useContext(MetamaskContext)
-  const { connectMetamask } = useMetamask()
-  const handleConnectClick = async () => {
-    await connectMetamask()
-  }
+  const connectWithMetamask = useMetamask()
+  const disconnect = useDisconnect()
+  const address = useAddress()
   return (
     <Flex
       flexDirection="row"
@@ -25,16 +22,12 @@ export const Header: React.FC = () => {
     >
       <Box>
         <HStack flexDirection="row" alignItems="center" cursor="pointer">
-          <Text fontSize="2xl" fontWeight="bold">
-            Sample Project
-          </Text>
-          {/* <Image
+          <Image
             src="/img/MKD_logo.webp"
             alt="MetaKozo Logo"
-            width={`${381 / 2}px`}
-            height={`${121 / 2}px`}
-            layout="intrinsic"
-          /> */}
+            width={190}
+            height={60}
+          />
         </HStack>
       </Box>
 
@@ -48,31 +41,34 @@ export const Header: React.FC = () => {
             m="2"
             px="3"
             py="2"
-            onClick={handleConnectClick}
+            onClick={address ? disconnect : connectWithMetamask}
           >
-            {network ? (
-              <HStack>
-                <Text
-                  mr="4"
-                  fontWeight="semibold"
-                  fontSize={{ base: 'xs', md: 'sm' }}
-                  color="white"
-                >
-                  {account &&
-                    `${account.slice(0, 4)}...${account.slice(
-                      account.length - 3,
-                      account.length
-                    )}`}
-                </Text>
-                <Jazzicon diameter={20} seed={jsNumberForAddress(account)} />
-              </HStack>
+            {address ? (
+              <>
+                <HStack>
+                  <Text
+                    mr="4"
+                    fontWeight="semibold"
+                    fontSize={{ base: 'xs', md: 'sm' }}
+                    color="white"
+                  >
+                    {address &&
+                      `${address.slice(0, 4)}...${address.slice(
+                        address.length - 3,
+                        address.length
+                      )}`}
+                  </Text>
+                  <Jazzicon diameter={20} seed={jsNumberForAddress(address)} />
+                </HStack>
+              </>
             ) : (
               <Text
                 fontWeight="semibold"
                 fontSize={{ base: 'xs', md: 'sm' }}
                 color="white"
+                letterSpacing={'wider'}
               >
-                Connect Wallet
+                Connect Metamask
               </Text>
             )}
           </Box>

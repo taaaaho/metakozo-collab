@@ -6,6 +6,10 @@ export default function Document() {
     <Html>
       <Head>
         <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=auto"
+        />
+        <link
           rel="apple-touch-icon"
           sizes="180x180"
           href="/favicons/apple-touch-icon.png"

@@ -18,6 +18,16 @@ const thema = extendTheme({
       500: '#FFF',
     },
   },
+  fontSizes: {
+    xxs: '0.625rem',
+  },
+  letterSpacings: {
+    letterSpacing: 'wider',
+  },
+  fonts: {
+    heading: `'Luckiest Guy', sans-serif`,
+    body: `'Luckiest Guy', sans-serif`,
+  },
 })
 
 export default thema

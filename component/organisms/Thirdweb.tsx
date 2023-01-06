@@ -1,44 +1,211 @@
-import { Box, Button, Text, VStack } from '@chakra-ui/react'
 import {
-  ConnectWallet,
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Input,
+  Text,
+  useNumberInput,
+  VStack,
+} from '@chakra-ui/react'
+import {
   useAddress,
   useContract,
   useMetamask,
-  Web3Button,
+  useNetworkMismatch,
+  useNetwork,
+  ChainId,
 } from '@thirdweb-dev/react'
+import { useEffect, useState } from 'react'
+import { ClaimCondition } from '@thirdweb-dev/sdk'
+import { format_date } from '../../utils/formatdate'
+import { ethers } from 'ethers'
+import { useToaster } from '../../hooks/useToaster'
+import { Loading } from './Loading'
 
 export default function Thirdweb() {
+  const isMismatched = useNetworkMismatch()
+  const [chain, switchNetwork] = useNetwork()
+  const [isMinting, setIsMinting] = useState(false)
+  const [isLoadContractData, setIsLoadContractData] = useState(false)
+  const { handleToast, mintSucceed, generalError } = useToaster()
   const connectWithMetamask = useMetamask()
   const address = useAddress()
-  const { contract } = useContract(
-    '0x977Fc9074F49b6508591Af243cd5696260206C6D',
+  const { contract, isLoading } = useContract(
+    process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
     'nft-drop'
   )
+  const [claimConditions, setClaimConditions] = useState<ClaimCondition>()
+  const [unclaimed, setUnclaimed] = useState<ethers.BigNumber>()
+  const fetch = async () => {
+    setIsLoadContractData(true)
+    try {
+      const phase = await contract?.claimConditions.getActive()
+      setClaimConditions(phase)
+      const unclaimedSupply = await contract?.totalUnclaimedSupply()
+      setUnclaimed(unclaimedSupply)
+    } finally {
+      setIsLoadContractData(false)
+    }
+  }
+
+  const mint = async () => {
+    if (address && contract) {
+      setIsMinting(true)
+      try {
+        const tx = await contract.claimTo(address, quantity)
+        const receipt = tx[0].receipt // the transaction receipt
+        const claimedTokenId = tx[0].id // the id of the NFT claimed
+        const claimedNFT = await tx[0].data() //
+        mintSucceed('ENJOY YOUR SPACE JOURNEY')
+      } catch (e: any) {
+        const message = e.reason
+          .replace(
+            'Error: VM Exception while processing transaction: reverted with reason string ',
+            ''
+          )
+          .replaceAll("'", '')
+        if (message) {
+          generalError(message)
+        } else {
+          handleToast(e.code as string)
+        }
+      } finally {
+        setIsMinting(false)
+        fetch()
+      }
+    }
+  }
+
+  const [quantity, setQuantity] = useState(1)
+  const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
+    useNumberInput({
+      step: 1,
+      defaultValue: 0,
+      min: 0,
+      max: 9,
+    })
+
+  const inc = getIncrementButtonProps()
+  const dec = getDecrementButtonProps()
+  const input = getInputProps()
+  useEffect(() => {
+    if (input['aria-valuetext']) {
+      setQuantity(Number(input['aria-valuetext']))
+    }
+  }, [input])
+  useEffect(() => {
+    fetch()
+  }, [contract])
+
+  if (isLoading || isLoadContractData) {
+    return <Loading />
+  }
   return (
-    <VStack>
-      <Text>{address}</Text>
-      {/* <iframe
-        src="https://gateway.ipfscdn.io/ipfs/Qmcine1gpZUbQ73nk7ZGCcjKBVFYXrEtqrhujXk3HDQ6Nn/erc721.html?contract=0x977Fc9074F49b6508591Af243cd5696260206C6D&chainId=5&theme=dark"
-        width="600px"
-        height="600px"
-        // style="max-width:100%;"
-        // frameBorder="0"
-      ></iframe> */}
-      <div>
-        <ConnectWallet />
-      </div>
-      {/* <div>
-        <Web3Button
-          contractAddress="0x..."
-          action={(contract) => contract.erc721.transfer('0x...', 1)}
-        />
-      </div> */}
+    <Flex
+      flexDir={'column'}
+      gap={4}
+      m={{ base: '2', md: '8' }}
+      bg="rgb(121, 136, 160, 0.8)"
+      color="white"
+      width={{ base: '480px', md: '500px' }}
+      borderRadius="90px"
+      height={{ base: '560px', md: '560px' }}
+      justifyContent="center"
+      alignItems="center"
+    >
+      <Text fontWeight={'bold'} fontSize={'3xl'} color="#FDEE21">
+        {claimConditions?.metadata?.name}
+      </Text>
+      {claimConditions && (
+        <Text fontWeight={'semibold'} fontSize={'xl'} letterSpacing={'wider'}>
+          {`SALE START: ${format_date(
+            claimConditions?.startTime.toString()
+          )} (JST)`}
+        </Text>
+      )}
+      {claimConditions && (
+        <Text fontWeight={'semibold'} fontSize={'xl'} letterSpacing={'wider'}>
+          {`PRICE: ${claimConditions?.currencyMetadata.displayValue}`}
+        </Text>
+      )}
+      {unclaimed && (
+        <Text fontWeight={'semibold'} fontSize={'2xl'} letterSpacing={'wider'}>
+          {`LEFT: ${claimConditions?.availableSupply} / ${claimConditions?.maxClaimableSupply}`}
+        </Text>
+      )}
       <Box>
-        <Button onClick={connectWithMetamask} bgColor="black" color="white">
-          Connect Metamask
-        </Button>
+        {address && !isMismatched ? (
+          <>
+            <HStack>
+              <HStack maxW="240px" backgroundColor="black" rounded="full">
+                <Button
+                  {...dec}
+                  borderRadius="full"
+                  backgroundColor="black"
+                  color="white"
+                  fontSize="3xl"
+                >
+                  -
+                </Button>
+                <Input
+                  {...input}
+                  width="48px"
+                  border="none"
+                  fontSize="2xl"
+                  color="white"
+                  readOnly
+                  _focus={{ boxShadow: { isInputFocused: 'none' } }}
+                />
+                <Button
+                  {...inc}
+                  borderRadius="full"
+                  backgroundColor="black"
+                  color="white"
+                  fontSize="3xl"
+                >
+                  +
+                </Button>
+              </HStack>
+              <Button
+                onClick={mint}
+                bgColor="black"
+                color="white"
+                fontWeight={'semibold'}
+                isLoading={isMinting}
+                letterSpacing={'wider'}
+              >
+                Mint
+              </Button>
+            </HStack>
+          </>
+        ) : address && isMismatched ? (
+          <>
+            <Button
+              bgColor="#9BD9FF"
+              color="black"
+              size="md"
+              fontWeight={'bold'}
+              onClick={() => {
+                if (switchNetwork) {
+                  switchNetwork(ChainId.Goerli)
+                }
+              }}
+            >
+              Switch Network
+            </Button>
+          </>
+        ) : (
+          <Button
+            onClick={connectWithMetamask}
+            bgColor="black"
+            color="white"
+            letterSpacing={'wider'}
+          >
+            Connect Metamask
+          </Button>
+        )}
       </Box>
-    </VStack>
+    </Flex>
   )
-  // Now you can use the nft drop contract in the rest of the component
 }
