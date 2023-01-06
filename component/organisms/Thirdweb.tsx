@@ -114,7 +114,7 @@ export default function Thirdweb() {
       justifyContent="center"
       alignItems="center"
     >
-      <Text fontWeight={'bold'} fontSize={'3xl'} color="#FDEE21">
+      <Text fontWeight={'bold'} fontSize={'4xl'} color="#FDEE21">
         {claimConditions?.metadata?.name}
       </Text>
       {claimConditions && (
@@ -138,12 +138,20 @@ export default function Thirdweb() {
         {address && !isMismatched ? (
           <>
             <HStack>
-              <HStack maxW="240px" backgroundColor="black" rounded="full">
+              <HStack
+                maxW="240px"
+                backgroundColor="black"
+                rounded="full"
+                bgColor="#9BD9FF"
+                color="black"
+              >
                 <Button
                   {...dec}
                   borderRadius="full"
-                  backgroundColor="black"
-                  color="white"
+                  // backgroundColor="black"
+                  // color="white"
+                  bgColor="#9BD9FF"
+                  color="black"
                   fontSize="3xl"
                 >
                   -
@@ -153,15 +161,19 @@ export default function Thirdweb() {
                   width="48px"
                   border="none"
                   fontSize="2xl"
-                  color="white"
+                  // color="white"
+                  bgColor="#9BD9FF"
+                  color="black"
                   readOnly
                   _focus={{ boxShadow: { isInputFocused: 'none' } }}
                 />
                 <Button
                   {...inc}
                   borderRadius="full"
-                  backgroundColor="black"
-                  color="white"
+                  bgColor="#9BD9FF"
+                  color="black"
+                  // backgroundColor="black"
+                  // color="white"
                   fontSize="3xl"
                 >
                   +
@@ -169,8 +181,10 @@ export default function Thirdweb() {
               </HStack>
               <Button
                 onClick={mint}
-                bgColor="black"
-                color="white"
+                bgColor="#9BD9FF"
+                color="black"
+                // bgColor="black"
+                // color="white"
                 fontWeight={'semibold'}
                 isLoading={isMinting}
                 letterSpacing={'wider'}
