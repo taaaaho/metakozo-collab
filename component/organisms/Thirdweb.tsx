@@ -102,18 +102,7 @@ export default function Thirdweb() {
     return <Loading />
   }
   return (
-    <Flex
-      flexDir={'column'}
-      gap={4}
-      m={{ base: '2', md: '8' }}
-      bg="rgb(121, 136, 160, 0.8)"
-      color="white"
-      width={{ base: '480px', md: '500px' }}
-      borderRadius="90px"
-      height={{ base: '560px', md: '560px' }}
-      justifyContent="center"
-      alignItems="center"
-    >
+    <Flex flexDir={'column'} gap={2} alignItems="center">
       <Text fontWeight={'bold'} fontSize={'4xl'} color="#FDEE21">
         {claimConditions?.metadata?.name}
       </Text>
