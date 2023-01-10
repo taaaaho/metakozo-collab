@@ -83,7 +83,7 @@ export default function Thirdweb() {
       step: 1,
       defaultValue: 0,
       min: 0,
-      max: 9,
+      max: 1,
     })
 
   const inc = getIncrementButtonProps()
@@ -124,63 +124,71 @@ export default function Thirdweb() {
         </Text>
       )}
       <Box>
-        {address && !isMismatched ? (
+        {address && !isMismatched ? ( // connect & network check
           <>
-            <HStack>
-              <HStack
-                maxW="240px"
-                backgroundColor="black"
-                rounded="full"
-                bgColor="#9BD9FF"
-                color="black"
-              >
-                <Button
-                  {...dec}
-                  borderRadius="full"
-                  // backgroundColor="black"
-                  // color="white"
+            {claimConditions &&
+            Number(claimConditions?.availableSupply) == 0 ? (
+              <Button bgColor="#9BD9FF" color="black">
+                Sold Out
+              </Button>
+            ) : (
+              <HStack>
+                <HStack
+                  maxW="240px"
+                  backgroundColor="black"
+                  rounded="full"
                   bgColor="#9BD9FF"
                   color="black"
-                  fontSize="3xl"
                 >
-                  -
-                </Button>
-                <Input
-                  {...input}
-                  width="48px"
-                  border="none"
-                  fontSize="2xl"
-                  // color="white"
-                  bgColor="#9BD9FF"
-                  color="black"
-                  readOnly
-                  _focus={{ boxShadow: { isInputFocused: 'none' } }}
-                />
+                  <Button
+                    {...dec}
+                    borderRadius="full"
+                    // backgroundColor="black"
+                    // color="white"
+                    bgColor="#9BD9FF"
+                    color="black"
+                    fontSize="3xl"
+                  >
+                    -
+                  </Button>
+                  <Input
+                    {...input}
+                    width="48px"
+                    border="none"
+                    fontSize="2xl"
+                    // color="white"
+                    bgColor="#9BD9FF"
+                    color="black"
+                    readOnly
+                    _focus={{ boxShadow: { isInputFocused: 'none' } }}
+                  />
+                  <Button
+                    {...inc}
+                    borderRadius="full"
+                    bgColor="#9BD9FF"
+                    color="black"
+                    // backgroundColor="black"
+                    // color="white"
+                    fontSize="3xl"
+                  >
+                    +
+                  </Button>
+                </HStack>
+
                 <Button
-                  {...inc}
-                  borderRadius="full"
+                  onClick={mint}
                   bgColor="#9BD9FF"
                   color="black"
-                  // backgroundColor="black"
+                  // bgColor="black"
                   // color="white"
-                  fontSize="3xl"
+                  fontWeight={'semibold'}
+                  isLoading={isMinting}
+                  letterSpacing={'wider'}
                 >
-                  +
+                  Mint
                 </Button>
               </HStack>
-              <Button
-                onClick={mint}
-                bgColor="#9BD9FF"
-                color="black"
-                // bgColor="black"
-                // color="white"
-                fontWeight={'semibold'}
-                isLoading={isMinting}
-                letterSpacing={'wider'}
-              >
-                Mint
-              </Button>
-            </HStack>
+            )}
           </>
         ) : address && isMismatched ? (
           <>
