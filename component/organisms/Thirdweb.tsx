@@ -40,8 +40,15 @@ export default function Thirdweb() {
   const fetch = async () => {
     setIsLoadContractData(true)
     try {
-      const phase = await contract?.claimConditions.getActive()
-      setClaimConditions(phase)
+      // TODO 第2弾セール時に調整必要
+      const conditions = await contract?.claimConditions.getAll()
+      if (conditions) {
+        console.log('conditions', conditions)
+        setClaimConditions(conditions[0])
+      }
+
+      // const phase = await contract?.claimConditions.getActive()
+      // setClaimConditions(phase)
       const unclaimedSupply = await contract?.totalUnclaimedSupply()
       setUnclaimed(unclaimedSupply)
     } finally {
@@ -199,7 +206,7 @@ export default function Thirdweb() {
               fontWeight={'bold'}
               onClick={() => {
                 if (switchNetwork) {
-                  switchNetwork(ChainId.Goerli)
+                  switchNetwork(Number(process.env.NEXT_PUBLIC_NETWORK_CHAINID))
                 }
               }}
             >

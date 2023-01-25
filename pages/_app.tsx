@@ -5,7 +5,9 @@ import { ThirdwebProvider, ChainId } from '@thirdweb-dev/react'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ThirdwebProvider desiredChainId={ChainId.Goerli}>
+    <ThirdwebProvider
+      desiredChainId={Number(process.env.NEXT_PUBLIC_NETWORK_CHAINID)}
+    >
       <ChakraProvider theme={theme}>
         <Component {...pageProps} />
       </ChakraProvider>
