@@ -1,10 +1,10 @@
-## Sandbox mint
+## Metakozo Collabo
 
-Practice of Create NFT Mint site.
-This contract developed by Remix and deployed to Rinkeby Test Network.
+Metakozo's collaborative mint site.
 
-You Can receive NFT by free.
-Current contract is tutorial contract, so you can receive fixed pattern NFT.
+The contract uses ThirdWeb. Therefore, the code is client-side only.
+
+After deploying the contract with Thirdweb, please specify the contract address in the env. Also, since screen rendering is performed using the information in Claim Condition, be sure to specify all information in Claim Condition.
 
 ## Getting Started
 
@@ -17,5 +17,3 @@ npm run dev
 # or
 yarn dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
