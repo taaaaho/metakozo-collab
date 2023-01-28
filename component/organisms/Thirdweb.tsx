@@ -41,14 +41,14 @@ export default function Thirdweb() {
     setIsLoadContractData(true)
     try {
       // TODO 第2弾セール時に調整必要
-      const conditions = await contract?.claimConditions.getAll()
-      if (conditions) {
-        console.log('conditions', conditions)
-        setClaimConditions(conditions[0])
-      }
+      // const conditions = await contract?.claimConditions.getAll()
+      // if (conditions) {
+      //   console.log('conditions', conditions)
+      //   setClaimConditions(conditions[0])
+      // }
 
-      // const phase = await contract?.claimConditions.getActive()
-      // setClaimConditions(phase)
+      const phase = await contract?.claimConditions.getActive()
+      setClaimConditions(phase)
       const unclaimedSupply = await contract?.totalUnclaimedSupply()
       setUnclaimed(unclaimedSupply)
     } finally {
