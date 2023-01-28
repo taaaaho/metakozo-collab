@@ -21,8 +21,8 @@ const Home: NextPage = () => {
           backgroundPosition="center"
           backgroundSize="cover"
           backgroundImage={{
-            base: '/img/mintsaiteSP.png',
-            md: '/img/mintsaitePC.png',
+            base: '/img/mintSP.jpg',
+            md: '/img/mintPC.jpg',
           }}
         >
           <Flex h="91vh" w="100vw" justifyContent="center" alignItems="center">
