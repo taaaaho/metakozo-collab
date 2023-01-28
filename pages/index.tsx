@@ -1,4 +1,4 @@
-import { Box, Center, Flex, VStack } from '@chakra-ui/react'
+import { Box, Center, Flex, Image, VStack } from '@chakra-ui/react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Header } from '../component/layout/Header'
@@ -27,17 +27,27 @@ const Home: NextPage = () => {
         >
           <Flex h="91vh" w="100vw" justifyContent="center" alignItems="center">
             <Flex
+              gap={4}
               w={{ base: '100%', md: '80%' }}
-              alignItems={{ base: 'center', md: 'flex-end' }}
-              justifyContent="flex-end"
+              direction={{ base: 'column', md: 'row' }}
+              alignItems={{ base: 'center', md: 'center' }}
+              justifyContent={{ base: 'flex-end', md: 'center' }}
             >
+              <Flex height={`100%`} justifyContent="center" alignItems="center">
+                <Image
+                  src="/img/metakozo_naito.jpg"
+                  width={{ base: 280, md: 380 }}
+                  height={{ base: 280, md: 380 }}
+                  alt="metakozo x naito"
+                />
+              </Flex>
               <Flex
                 m={{ base: '2', md: '8' }}
                 bg="rgb(121, 136, 160, 0.8)"
                 color="white"
-                width={{ base: '480px', md: '500px' }}
+                width={{ base: '380px', md: '480px' }}
                 borderRadius="90px"
-                height={{ base: '560px', md: '560px' }}
+                height={{ base: '380px', md: '480px' }}
                 justifyContent="center"
                 alignItems="center"
               >
