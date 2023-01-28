@@ -27,7 +27,7 @@ const Home: NextPage = () => {
         >
           <Flex h="91vh" w="100vw" justifyContent="center" alignItems="center">
             <Flex
-              gap={4}
+              gap={2}
               w={{ base: '100%', md: '80%' }}
               direction={{ base: 'column', md: 'row' }}
               alignItems={{ base: 'center', md: 'center' }}
@@ -36,8 +36,8 @@ const Home: NextPage = () => {
               <Flex height={`100%`} justifyContent="center" alignItems="center">
                 <Image
                   src="/img/metakozo_naito.jpg"
-                  width={{ base: 280, md: 380 }}
-                  height={{ base: 280, md: 380 }}
+                  width={{ base: 240, md: 380 }}
+                  height={{ base: 240, md: 380 }}
                   alt="metakozo x naito"
                 />
               </Flex>
@@ -47,7 +47,7 @@ const Home: NextPage = () => {
                 color="white"
                 width={{ base: '380px', md: '480px' }}
                 borderRadius="90px"
-                height={{ base: '380px', md: '480px' }}
+                height={{ base: '320px', md: '480px' }}
                 justifyContent="center"
                 alignItems="center"
               >
