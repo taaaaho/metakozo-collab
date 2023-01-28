@@ -23,7 +23,7 @@ export const Header: React.FC = () => {
       <Box>
         <HStack flexDirection="row" alignItems="center" cursor="pointer">
           <Image
-            src="/img/MKD_logo.webp"
+            src="/img/MetaKozo_logo_CollaborationCollection.png"
             alt="MetaKozo Logo"
             width={190}
             height={60}
