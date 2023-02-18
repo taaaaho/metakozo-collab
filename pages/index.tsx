@@ -35,7 +35,7 @@ const Home: NextPage = () => {
             >
               <Flex height={`100%`} justifyContent="center" alignItems="center">
                 <Image
-                  src="/img/metakozo_naito.jpg"
+                  src="https://cdn.discordapp.com/attachments/1012665083421270078/1075612552748343366/IMG_3513.JPG"
                   width={{ base: 240, md: 380 }}
                   height={{ base: 240, md: 380 }}
                   alt="metakozo x naito"
