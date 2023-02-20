@@ -42,12 +42,14 @@ export default function Thirdweb() {
     try {
       // TODO 第2弾セール時に調整必要
       // const conditions = await contract?.claimConditions.getAll()
+      // console.log(conditions)
       // if (conditions) {
       //   console.log('conditions', conditions)
       //   setClaimConditions(conditions[0])
       // }
 
       const phase = await contract?.claimConditions.getActive()
+      // console.log('phase', phase)
       setClaimConditions(phase)
       const unclaimedSupply = await contract?.totalUnclaimedSupply()
       setUnclaimed(unclaimedSupply)
@@ -110,7 +112,12 @@ export default function Thirdweb() {
   }
   return (
     <Flex flexDir={'column'} gap={2} alignItems="center">
-      <Text fontWeight={'bold'} fontSize={'4xl'} color="#FDEE21">
+      <Text
+        fontWeight={'bold'}
+        fontSize={'4xl'}
+        color="#FDEE21"
+        textAlign={'center'}
+      >
         {claimConditions?.metadata?.name}
       </Text>
       {claimConditions && (
