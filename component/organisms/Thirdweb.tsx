@@ -22,8 +22,18 @@ import { format_date } from '../../utils/formatdate'
 import { ethers } from 'ethers'
 import { useToaster } from '../../hooks/useToaster'
 import { Loading } from './Loading'
+import { Config } from '@/utils/firestore'
+import axios from 'axios'
 
 export default function Thirdweb() {
+  const [contractAddress, setContractAddress] = useState<string>()
+  useEffect(() => {
+    const fetchConfig = async () => {
+      const res = await axios.get<Config>('/api/firestore')
+      setContractAddress(res.data.contractAddress)
+    }
+    fetchConfig()
+  }, [])
   const isMismatched = useNetworkMismatch()
   const [chain, switchNetwork] = useNetwork()
   const [isMinting, setIsMinting] = useState(false)
@@ -32,7 +42,8 @@ export default function Thirdweb() {
   const connectWithMetamask = useMetamask()
   const address = useAddress()
   const { contract, isLoading } = useContract(
-    process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+    // process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
+    contractAddress,
     'nft-drop'
   )
   const [claimConditions, setClaimConditions] = useState<ClaimCondition>()
@@ -49,7 +60,6 @@ export default function Thirdweb() {
       // }
 
       const phase = await contract?.claimConditions.getActive()
-      // console.log('phase', phase)
       setClaimConditions(phase)
       const unclaimedSupply = await contract?.totalUnclaimedSupply()
       setUnclaimed(unclaimedSupply)

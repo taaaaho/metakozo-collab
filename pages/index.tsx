@@ -1,11 +1,27 @@
+import { Loading } from '@/component/organisms/Loading'
+import { Config } from '@/utils/firestore'
 import { Box, Center, Flex, Image, VStack } from '@chakra-ui/react'
+import axios from 'axios'
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import { useEffect, useState } from 'react'
 import { Header } from '../component/layout/Header'
 
 import Thirdweb from '../component/organisms/Thirdweb'
 
 const Home: NextPage = () => {
+  const [config, setConfig] = useState<Config>()
+  useEffect(() => {
+    const fetchConfig = async () => {
+      const res = await axios.get<Config>('/api/firestore')
+      setConfig(res.data)
+    }
+    fetchConfig()
+  }, [])
+
+  if (!config) {
+    return <Loading />
+  }
   return (
     <Box>
       <Head>
@@ -21,8 +37,8 @@ const Home: NextPage = () => {
           backgroundPosition="center"
           backgroundSize="cover"
           backgroundImage={{
-            base: '/img/mintSP.jpg',
-            md: '/img/mintPC.jpg',
+            base: config.backgroundImageSP,
+            md: config.backgroundImagePC,
           }}
         >
           <Flex h="91vh" w="100vw" justifyContent="center" alignItems="center">
@@ -35,7 +51,7 @@ const Home: NextPage = () => {
             >
               <Flex height={`100%`} justifyContent="center" alignItems="center">
                 <Image
-                  src="https://cdn.discordapp.com/attachments/1012665083421270078/1075612552748343366/IMG_3513.JPG"
+                  src={config.centerImage}
                   width={{ base: 240, md: 380 }}
                   height={{ base: 240, md: 380 }}
                   alt="metakozo x naito"
