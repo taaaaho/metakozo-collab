@@ -10,6 +10,12 @@ interface Request extends NextApiRequest {
 // eslint-disable-next-line import/no-anonymous-default-export
 export default async (req: Request, res: NextApiResponse) => {
   const { method } = req
+  if (
+    req.headers.referer !== 'http://localhost:3000/admin' &&
+    req.headers.referer !== 'https://collaboration.metakozo-dao.xyz/admin'
+  ) {
+    return res.status(400).json('No')
+  }
   switch (method) {
     case 'GET': {
       const snapshot = await configRef.get()
